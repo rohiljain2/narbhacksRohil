@@ -40,7 +40,7 @@ Run `pnpm install`.
 > that.
 
 ```sh
-pnpm run setup --workspace packages/backend
+cd packages/backend && pnpm run setup
 ```
 
 The script will log you into Convex if you aren't already and prompt you to
