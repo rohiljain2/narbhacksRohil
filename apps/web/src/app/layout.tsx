@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat, Lato } from "next/font/google";
+import { Inter, Lato, Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 import ConvexClientProvider from "./ConvexClientProvider";
@@ -20,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, montserrat.className, lato.className)}>
+      <body
+        className={cn(inter.className, montserrat.className, lato.className)}
+      >
         <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>

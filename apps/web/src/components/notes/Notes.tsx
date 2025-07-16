@@ -17,7 +17,7 @@ const Notes = () => {
     ? allNotes?.filter(
         (note) =>
           note.title.toLowerCase().includes(search.toLowerCase()) ||
-          note.content.toLowerCase().includes(search.toLowerCase()),
+          note.content.toLowerCase().includes(search.toLowerCase())
       )
     : allNotes;
 
@@ -46,10 +46,9 @@ const Notes = () => {
       </div>
 
       <div className="border-[0.5px] mb-20 divide-y-[0.5px] divide-[#00000096] border-[#00000096]">
-        {finalNotes &&
-          finalNotes.map((note, index) => (
-            <NoteItem key={index} note={note} deleteNote={deleteNote} />
-          ))}
+        {finalNotes?.map((note) => (
+          <NoteItem key={note._id} note={note} deleteNote={deleteNote} />
+        ))}
       </div>
 
       <CreateNote />

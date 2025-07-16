@@ -1,5 +1,6 @@
-import { useClerk } from "@clerk/clerk-react";
+import { SignOutButton } from "@clerk/nextjs";
 import { LogOut, Paintbrush2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Button } from "./button";
@@ -12,25 +13,26 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 
-export function UserNav({
-  image,
-  name,
-  email,
-}: {
-  image: string;
+interface UserNavProps {
   name: string;
   email: string;
-}) {
-  const { signOut } = useClerk();
+  image?: string;
+}
 
+export function UserNav({ name, email, image }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
             <AvatarImage src={image} alt={name} />
             <AvatarFallback>
-              <img src={"/images/profile.png"} alt={name} />
+              <Image
+                src="/images/profile.png"
+                alt={name}
+                width={32}
+                height={32}
+              />
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -51,13 +53,12 @@ export function UserNav({
             <span className="text-black">Dashboard</span>
           </DropdownMenuItem>
         </Link>
-        <DropdownMenuItem
-          onClick={() => signOut()}
-          className="hover:cursor-pointer hover:bg-gray-200"
-        >
-          <LogOut className="mr-2 h-4 w-4 text-black" />
-          <span className="text-black">Log out</span>
-        </DropdownMenuItem>
+        <SignOutButton>
+          <DropdownMenuItem className="hover:cursor-pointer hover:bg-gray-200">
+            <LogOut className="mr-2 h-4 w-4 text-black" />
+            <span className="text-black">Log out</span>
+          </DropdownMenuItem>
+        </SignOutButton>
       </DropdownMenuContent>
     </DropdownMenu>
   );

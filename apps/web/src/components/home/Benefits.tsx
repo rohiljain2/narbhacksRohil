@@ -46,23 +46,21 @@ const Benefits = () => {
 
         <div className="relative">
           <div className="hidden sm:flex justify-between items-center absolute inset-0 -z-10">
-            {Array(3)
-              .fill(0)
-              .map((_, index) => (
-                <Image
-                  src="/images/cricle.svg"
-                  width={183}
-                  height={193}
-                  alt="line"
-                  key={index}
-                />
-              ))}
+            {Array.from({ length: 3 }, (_, index) => (
+              <Image
+                src="/images/cricle.svg"
+                width={302}
+                height={193}
+                alt="line"
+                key={`bg-circle-${index + 1}`}
+              />
+            ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 z-10 ">
-            {benefits.map((benefit, index) => (
+            {benefits.map((benefit) => (
               <div
-                key={index}
+                key={benefit.title}
                 className="flex gap-2 sm:gap-7 bg-white items-center border rounded-[17px] py-4 px-2 sm:py-12 sm:px-6 border-solid border-[#B8B5B5] shadow-xl"
               >
                 <div className=" min-w-16 sm:min-w-28">

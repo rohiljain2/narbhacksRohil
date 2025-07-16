@@ -86,6 +86,39 @@ of the Convex backend, web app, and mobile app separately.
 If you'd rather see all of the lod gs in one place, delete the
 `"ui": "tui",` line in [turbo.json](./turbo.json).
 
+## Code Quality & Formatting
+
+This project uses [Biome](https://biomejs.dev/) for linting, formatting, and maintaining code quality across the monorepo. Biome is a fast, all-in-one toolchain that provides:
+
+- **Linting**: Static analysis to catch bugs and enforce code quality rules
+- **Formatting**: Consistent code style across TypeScript, JavaScript, JSON, and CSS files
+- **Import Sorting**: Automatic organization of import statements
+
+### Available Commands
+
+```sh
+# Check for linting and formatting issues
+pnpm run lint
+
+# Fix linting and formatting issues automatically
+pnpm run lint:fix
+
+# Format code only (without linting)
+pnpm run format:biome
+
+# Check all issues (alias for lint)
+pnpm run check
+```
+
+The configuration is defined in [`biome.json`](./biome.json) and includes:
+- TypeScript and React-specific rules
+- Accessibility checks
+- Security best practices
+- Import/export organization
+- Consistent formatting with 2-space indentation
+
+Both Biome and Prettier are available for formatting, with Biome being the primary choice for new development due to its speed and comprehensive feature set.
+
 ## Deploying
 
 In order to both deploy the frontend and Convex, run this as the build command from the apps/web directory:
@@ -118,7 +151,8 @@ This Turborepo has some additional tools already setup for you:
 
 - [Expo](https://docs.expo.dev/) for native development
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Prettier](https://prettier.io) for code formatting
+- [Biome](https://biomejs.dev/) for fast linting, formatting, and code quality
+- [Prettier](https://prettier.io) for additional code formatting
 
 # What is Convex?
 

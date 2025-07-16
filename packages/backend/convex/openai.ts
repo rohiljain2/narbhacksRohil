@@ -1,7 +1,7 @@
-import OpenAI from "openai";
-import { internalAction, internalMutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import OpenAI from "openai";
 import { internal } from "./_generated/api";
+import { internalAction, internalMutation, query } from "./_generated/server";
 import { missingEnvVariableUrl } from "./utils";
 
 export const openaiKeySet = query({
@@ -24,7 +24,7 @@ export const summary = internalAction({
     if (!apiKey) {
       const error = missingEnvVariableUrl(
         "OPENAI_API_KEY",
-        "https://platform.openai.com/account/api-keys",
+        "https://platform.openai.com/account/api-keys"
       );
       console.error(error);
       await ctx.runMutation(internal.openai.saveSummary, {
@@ -50,7 +50,11 @@ export const summary = internalAction({
     // Pull the message content out of the response
     const messageContent = output.choices[0]?.message.content;
 
-    const parsedOutput = JSON.parse(messageContent!);
+    if (!messageContent) {
+      throw new Error("No content received from OpenAI");
+    }
+
+    const parsedOutput = JSON.parse(messageContent);
 
     await ctx.runMutation(internal.openai.saveSummary, {
       id: id,

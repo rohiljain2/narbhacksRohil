@@ -16,7 +16,10 @@ const Hero = () => {
               thoughts
             </p>
             <Link href={"/notes"}>
-              <button className="button gap-2.5 px-8 py-4 font-montserrat text-white text-xl sm:text-3xl not-italic font-semibold leading-[90.3%] tracking-[-0.5px] sm:tracking-[-0.75px]">
+              <button
+                type="button"
+                className="button gap-2.5 px-8 py-4 font-montserrat text-white text-xl sm:text-3xl not-italic font-semibold leading-[90.3%] tracking-[-0.5px] sm:tracking-[-0.75px]"
+              >
                 Get Started
               </button>
             </Link>

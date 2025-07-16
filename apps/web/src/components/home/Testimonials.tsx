@@ -66,8 +66,8 @@ const Testimonials = () => {
             alt=""
             className="absolute hidden md:block right-0 bottom-full"
           />
-          {TestimonialsData.map((item, index) => (
-            <TestTimonialCard data={item} key={index} />
+          {TestimonialsData.map((item) => (
+            <TestTimonialCard data={item} key={item.name} />
           ))}
         </div>
       </div>

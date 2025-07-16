@@ -1,10 +1,14 @@
 "use client";
-import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { Fragment, useRef, useState } from "react";
 
-export default function DeleteNote({ deleteAction }: any) {
+interface DeleteNoteProps {
+  deleteAction: () => void;
+}
+
+export default function DeleteNote({ deleteAction }: DeleteNoteProps) {
   const [open, setOpen] = useState(false);
 
   const cancelButtonRef = useRef(null);

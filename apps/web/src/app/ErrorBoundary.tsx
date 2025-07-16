@@ -1,5 +1,4 @@
-import { Component, ReactNode } from "react";
-import NextLink from "next/link";
+import { Component, type ReactNode } from "react";
 
 // NOTE: Once you get Clerk working you can remove this error boundary
 export class ErrorBoundary extends Component<
@@ -12,46 +11,14 @@ export class ErrorBoundary extends Component<
   }
 
   static getDerivedStateFromError(error: unknown) {
-    const errorText = "" + (error as any).toString();
+    const errorText = `${error instanceof Error ? error.message : String(error)}`;
     if (
       errorText.includes("@clerk/clerk-react") &&
-      errorText.includes("publishableKey")
+      errorText.includes("ClerkProvider")
     ) {
-      const [clerkDashboardUrl] = errorText.match(/https:\S+/) ?? [];
-      return {
-        error: (
-          <>
-            <p>
-              Add{" "}
-              <code className="relative rounded-sm bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY={'"<your publishable key>"'}
-              </code>{" "}
-              to the{" "}
-              <code className="relative rounded-sm bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-                .env
-              </code>{" "}
-              file
-            </p>
-            {clerkDashboardUrl ? (
-              <p>
-                You can find it at{" "}
-                <NextLink
-                  href={clerkDashboardUrl}
-                  target="_blank"
-                  className="font-medium text-primary underline underline-offset-4 hover:no-underline cursor-pointer"
-                >
-                  {clerkDashboardUrl}
-                </NextLink>
-              </p>
-            ) : null}
-            <p className="pl-8 text-muted-foreground">Raw error: {errorText}</p>
-          </>
-        ),
-      };
+      return { hasError: true, error: "clerk-error" };
     }
-
-    // propagate error to Next.js provided error boundary
-    throw error;
+    return { hasError: true, error: errorText };
   }
 
   componentDidCatch() {}
