@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import { LogBox, Platform, StatusBar, View } from "react-native";
 import ConvexClientProvider from "./ConvexClientProvider";
+import LocationDisplay from "./src/components/LocationDisplay";
 import Navigation from "./src/navigation/Navigation";
 
 export default function App() {
@@ -36,7 +37,10 @@ export default function App() {
             barStyle="light-content"
           />
         </View>
-        <Navigation />
+        <LocationDisplay style={{ margin: 10, marginBottom: 5 }} />
+        <View style={{ flex: 1 }}>
+          <Navigation />
+        </View>
       </View>
     </ConvexClientProvider>
   );

@@ -1,14 +1,15 @@
+import type { Id } from "@packages/backend/convex/_generated/dataModel";
 import Link from "next/link";
 import DeleteNote from "./DeleteNote";
 
 interface NoteItemProps {
   note: {
-    _id: string;
+    _id: Id<"notes">;
     title: string;
     content: string;
     _creationTime: number;
   };
-  deleteNote: (noteId: string) => void;
+  deleteNote: (args: { noteId: Id<"notes"> }) => void;
 }
 
 const NoteItem = ({ note, deleteNote }: NoteItemProps) => {
@@ -22,7 +23,7 @@ const NoteItem = ({ note, deleteNote }: NoteItemProps) => {
       <p className="hidden md:flex text-[#2D2D2D] text-center text-xl not-italic font-extralight leading-[114.3%] tracking-[-0.5px]">
         {new Date(Number(note._creationTime)).toLocaleDateString()}
       </p>
-      <DeleteNote deleteAction={() => deleteNote(note._id)} />
+      <DeleteNote deleteAction={() => deleteNote({ noteId: note._id })} />
     </div>
   );
 };

@@ -52,8 +52,9 @@ const LoginScreen = ({ navigation }) => {
                   phoneNumber: "+1234567890", // Dummy number - you should handle this properly
                 });
 
-                const { createdSessionId: newSessionId } =
-                  await signUp.create();
+                const { createdSessionId: newSessionId } = await signUp.create(
+                  {}
+                );
 
                 if (newSessionId) {
                   await setActive({ session: newSessionId });
@@ -69,8 +70,9 @@ const LoginScreen = ({ navigation }) => {
             } else {
               // Phone is optional, just create the user
               try {
-                const { createdSessionId: newSessionId } =
-                  await signUp.create();
+                const { createdSessionId: newSessionId } = await signUp.create(
+                  {}
+                );
 
                 if (newSessionId) {
                   await setActive({ session: newSessionId });

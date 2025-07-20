@@ -1,11 +1,12 @@
-import { Component, type ReactNode } from "react";
+import type React from "react";
+import { Component } from "react";
 
 // NOTE: Once you get Clerk working you can remove this error boundary
 export class ErrorBoundary extends Component<
-  { children: ReactNode },
-  { error: ReactNode | null }
+  { children: React.ReactNode },
+  { error: React.ReactNode | null }
 > {
-  constructor(props: { children: ReactNode }) {
+  constructor(props: { children: React.ReactNode }) {
     super(props);
     this.state = { error: null };
   }

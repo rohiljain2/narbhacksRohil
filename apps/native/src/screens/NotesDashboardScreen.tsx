@@ -24,7 +24,7 @@ const NotesDashboardScreen = ({ navigation }) => {
   const [search, setSearch] = useState("");
 
   const finalNotes = search
-    ? allNotes.filter(
+    ? allNotes?.filter(
         (note) =>
           note.title.toLowerCase().includes(search.toLowerCase()) ||
           note.content.toLowerCase().includes(search.toLowerCase())
