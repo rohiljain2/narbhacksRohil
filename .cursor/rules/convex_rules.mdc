@@ -1,9 +1,14 @@
----
-description: Guidelines and best practices for building Convex projects, including database schema design, queries, mutations, and real-world examples
-globs: **/*.ts,**/*.tsx,**/*.js,**/*.jsx
----
 
 # Convex guidelines
+
+## Code quality guidelines
+### Biome linter and formatter
+- ALWAYS use Biome linter and formatter when possible to maintain consistent code quality and formatting across the project.
+- Run Biome formatter before committing code to ensure consistent style.
+- Address all Biome linter warnings and errors to maintain clean, readable code.
+- Use Biome's configuration file (`biome.json`) to customize rules according to project standards.
+- Integrate Biome into your development workflow for automatic formatting and linting.
+
 ## Function guidelines
 ### New function syntax
 - ALWAYS use the new function syntax for Convex functions. For example:
@@ -671,6 +676,19 @@ export default defineSchema({
 ```typescript
 export default function App() {
   return <div>Hello World</div>;
+}
+```
+
+
+## Code quality guidelines
+### Biome linter and formatter
+- ALWAYS use Biome linter and formatter when possible to maintain consistent code quality and formatting across the project.
+- Run Biome formatter before committing code to ensure consistent style.
+- Address all Biome linter warnings and errors to maintain clean, readable code.
+- Use Biome's configuration file (`biome.json`) to customize rules according to project standards.
+- Integrate Biome into your development workflow for automatic formatting and linting.
+
+
 }
 ```
 
