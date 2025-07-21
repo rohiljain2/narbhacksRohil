@@ -1,42 +1,64 @@
 "use client";
 
 import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@packages/backend/convex/_generated/api";
+import { Id } from "@packages/backend/convex/_generated/dataModel";
 import Link from "next/link";
 
 interface WeightEntry {
-  id: string;
-  date: string;
+  _id: Id<"progress">;
+  _creationTime: number;
+  userId: string;
   weight: number;
+  date: string;
   notes?: string;
 }
 
 export default function ProgressPage() {
-  const [weightEntries, setWeightEntries] = useState<WeightEntry[]>([
-    { id: "1", date: "2024-01-01", weight: 180, notes: "Starting weight" },
-    { id: "2", date: "2024-01-08", weight: 178, notes: "Good week" },
-    { id: "3", date: "2024-01-15", weight: 176, notes: "Feeling stronger" },
-  ]);
+  const { user, isLoaded } = useUser();
+  const userId = user?.id;
+
+  const weightEntries = useQuery(
+    api.progress.getWeightEntries,
+    userId ? {} : "skip"
+  ) as WeightEntry[] | undefined || [];
+
+  const saveWeightEntry = useMutation(api.progress.saveWeightEntry);
+  const deleteWeightEntryMutation = useMutation(api.progress.deleteWeightEntry);
 
   const [showAddWeight, setShowAddWeight] = useState(false);
   const [newWeight, setNewWeight] = useState({ weight: 0, notes: "" });
 
-  const addWeightEntry = () => {
+  if (!isLoaded) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Link href="/sign-in" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Sign In
+        </Link>
+      </div>
+    );
+  }
+
+  const addWeightEntry = async () => {
     if (newWeight.weight > 0) {
-      const entry: WeightEntry = {
-        id: Date.now().toString(),
-        date: new Date().toISOString().split('T')[0],
+      await saveWeightEntry({
         weight: newWeight.weight,
-        notes: newWeight.notes
-      };
-      setWeightEntries([...weightEntries, entry]);
+        date: new Date().toISOString().split('T')[0],
+        notes: newWeight.notes || undefined
+      });
       setNewWeight({ weight: 0, notes: "" });
       setShowAddWeight(false);
     }
   };
 
-  const deleteWeightEntry = (entryId: string) => {
+  const handleDeleteWeightEntry = async (entryId: Id<"progress">) => {
     if (confirm("Are you sure you want to delete this weight entry? This action cannot be undone.")) {
-      setWeightEntries(weightEntries.filter(entry => entry.id !== entryId));
+      await deleteWeightEntryMutation({ entryId });
     }
   };
 
@@ -99,7 +121,7 @@ export default function ProgressPage() {
             ) : (
               <div className="space-y-4">
                 {weightEntries.slice().reverse().map((entry) => (
-                  <div key={entry.id} className="flex items-center justify-between p-4 bg-gray-50 rounded">
+                  <div key={entry._id} className="flex items-center justify-between p-4 bg-gray-50 rounded">
                     <div>
                       <h3 className="font-medium text-gray-900">{entry.weight} lbs</h3>
                       <p className="text-sm text-gray-600">{entry.date}</p>
@@ -118,7 +140,7 @@ export default function ProgressPage() {
                         )}
                       </div>
                       <button
-                        onClick={() => deleteWeightEntry(entry.id)}
+                        onClick={() => handleDeleteWeightEntry(entry._id)}
                         className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete weight entry"
                       >

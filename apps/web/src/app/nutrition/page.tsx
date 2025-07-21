@@ -1,10 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@packages/backend/convex/_generated/api";
+import { Id } from "@packages/backend/convex/_generated/dataModel";
 import Link from "next/link";
 
 interface Meal {
-  id: string;
+  _id: Id<"nutrition">;
+  _creationTime: number;
+  userId: string;
   name: string;
   type: "breakfast" | "lunch" | "dinner" | "snack";
   calories: number;
@@ -15,38 +21,16 @@ interface Meal {
 }
 
 export default function NutritionPage() {
-  const [meals, setMeals] = useState<Meal[]>([
-    {
-      id: "1",
-      name: "Oatmeal with Berries",
-      type: "breakfast",
-      calories: 320,
-      protein: 12,
-      carbs: 45,
-      fat: 8,
-      date: "2024-01-15"
-    },
-    {
-      id: "2",
-      name: "Grilled Chicken Salad",
-      type: "lunch",
-      calories: 450,
-      protein: 35,
-      carbs: 15,
-      fat: 22,
-      date: "2024-01-15"
-    },
-    {
-      id: "3",
-      name: "Salmon with Rice",
-      type: "dinner",
-      calories: 580,
-      protein: 42,
-      carbs: 55,
-      fat: 18,
-      date: "2024-01-15"
-    }
-  ]);
+  const { user, isLoaded } = useUser();
+  const userId = user?.id;
+
+  const meals = useQuery(
+    api.nutrition.getMeals,
+    userId ? {} : "skip"
+  ) as Meal[] | undefined || [];
+
+  const saveMeal = useMutation(api.nutrition.saveMeal);
+  const deleteMealMutation = useMutation(api.nutrition.deleteMeal);
 
   const [showAddMeal, setShowAddMeal] = useState(false);
   const [newMeal, setNewMeal] = useState({
@@ -58,6 +42,19 @@ export default function NutritionPage() {
     fat: 0
   });
 
+  if (!isLoaded) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Link href="/sign-in" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Sign In
+        </Link>
+      </div>
+    );
+  }
+
   const todayMeals = meals.filter(meal => meal.date === new Date().toISOString().split('T')[0]);
   
   const totalCalories = todayMeals.reduce((sum, meal) => sum + meal.calories, 0);
@@ -65,14 +62,17 @@ export default function NutritionPage() {
   const totalCarbs = todayMeals.reduce((sum, meal) => sum + meal.carbs, 0);
   const totalFat = todayMeals.reduce((sum, meal) => sum + meal.fat, 0);
 
-  const addMeal = () => {
+  const addMeal = async () => {
     if (newMeal.name.trim()) {
-      const meal: Meal = {
-        id: Date.now().toString(),
-        ...newMeal,
+      await saveMeal({
+        name: newMeal.name,
+        type: newMeal.type,
+        calories: newMeal.calories,
+        protein: newMeal.protein,
+        carbs: newMeal.carbs,
+        fat: newMeal.fat,
         date: new Date().toISOString().split('T')[0]
-      };
-      setMeals([...meals, meal]);
+      });
       setNewMeal({
         name: "",
         type: "breakfast",
@@ -85,9 +85,9 @@ export default function NutritionPage() {
     }
   };
 
-  const deleteMeal = (mealId: string) => {
+  const handleDeleteMeal = async (mealId: Id<"nutrition">) => {
     if (confirm("Are you sure you want to delete this meal? This action cannot be undone.")) {
-      setMeals(meals.filter(meal => meal.id !== mealId));
+      await deleteMealMutation({ mealId });
     }
   };
 
@@ -159,7 +159,7 @@ export default function NutritionPage() {
             ) : (
               <div className="space-y-4">
                 {todayMeals.map((meal) => (
-                  <div key={meal.id} className="flex items-center justify-between p-4 bg-gray-50 rounded">
+                  <div key={meal._id} className="flex items-center justify-between p-4 bg-gray-50 rounded">
                     <div className="flex items-center space-x-4">
                       <span className={`px-3 py-1 rounded-full text-sm ${getMealTypeColor(meal.type)}`}>
                         {meal.type.charAt(0).toUpperCase() + meal.type.slice(1)}
@@ -172,7 +172,7 @@ export default function NutritionPage() {
                       </div>
                     </div>
                     <button
-                      onClick={() => deleteMeal(meal.id)}
+                      onClick={() => handleDeleteMeal(meal._id)}
                       className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete meal"
                     >
@@ -195,7 +195,7 @@ export default function NutritionPage() {
           <div className="p-6">
             <div className="space-y-4">
               {meals.slice(0, 5).map((meal) => (
-                <div key={meal.id} className="flex items-center justify-between p-4 bg-gray-50 rounded">
+                <div key={meal._id} className="flex items-center justify-between p-4 bg-gray-50 rounded">
                   <div className="flex items-center space-x-4">
                     <span className={`px-3 py-1 rounded-full text-sm ${getMealTypeColor(meal.type)}`}>
                       {meal.type.charAt(0).toUpperCase() + meal.type.slice(1)}
@@ -212,7 +212,7 @@ export default function NutritionPage() {
                       P: {meal.protein}g • C: {meal.carbs}g • F: {meal.fat}g
                     </div>
                     <button
-                      onClick={() => deleteMeal(meal.id)}
+                      onClick={() => handleDeleteMeal(meal._id)}
                       className="px-3 py-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete meal"
                     >

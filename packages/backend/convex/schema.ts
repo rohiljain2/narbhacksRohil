@@ -23,4 +23,22 @@ export default defineSchema({
     })),
     completed: v.boolean(),
   }),
+
+  nutrition: defineTable({
+    userId: v.string(),
+    name: v.string(),
+    type: v.union(v.literal("breakfast"), v.literal("lunch"), v.literal("dinner"), v.literal("snack")),
+    calories: v.number(),
+    protein: v.number(),
+    carbs: v.number(),
+    fat: v.number(),
+    date: v.string(),
+  }),
+
+  progress: defineTable({
+    userId: v.string(),
+    weight: v.number(),
+    date: v.string(),
+    notes: v.optional(v.string()),
+  }),
 });
