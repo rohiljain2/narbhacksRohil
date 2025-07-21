@@ -10,6 +10,17 @@ export const getUserId = async (ctx: { auth: Auth }) => {
 // Get all notes for a specific user
 export const getNotes = query({
   args: {},
+  returns: v.union(
+    v.array(v.object({
+      _id: v.id("notes"),
+      _creationTime: v.number(),
+      userId: v.string(),
+      title: v.string(),
+      content: v.string(),
+      summary: v.optional(v.string()),
+    })),
+    v.null()
+  ),
   handler: async (ctx) => {
     const userId = await getUserId(ctx);
     if (!userId) return null;
@@ -28,6 +39,17 @@ export const getNote = query({
   args: {
     id: v.optional(v.id("notes")),
   },
+  returns: v.union(
+    v.object({
+      _id: v.id("notes"),
+      _creationTime: v.number(),
+      userId: v.string(),
+      title: v.string(),
+      content: v.string(),
+      summary: v.optional(v.string()),
+    }),
+    v.null()
+  ),
   handler: async (ctx, args) => {
     const { id } = args;
     if (!id) return null;
@@ -43,6 +65,7 @@ export const createNote = mutation({
     content: v.string(),
     isSummary: v.boolean(),
   },
+  returns: v.id("notes"),
   handler: async (ctx, { title, content, isSummary }) => {
     const userId = await getUserId(ctx);
     if (!userId) throw new Error("User not found");
@@ -64,7 +87,9 @@ export const deleteNote = mutation({
   args: {
     noteId: v.id("notes"),
   },
+  returns: v.null(),
   handler: async (ctx, args) => {
     await ctx.db.delete(args.noteId);
+    return null;
   },
 });
