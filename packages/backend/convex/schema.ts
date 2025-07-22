@@ -41,4 +41,12 @@ export default defineSchema({
     date: v.string(),
     notes: v.optional(v.string()),
   }),
+
+  userGoals: defineTable({
+    userId: v.string(),
+    weeklyActivityGoal: v.number(), // Number of days per week user wants to be active
+    calorieGoal: v.optional(v.number()), // Daily calorie goal
+    weightGoal: v.optional(v.number()), // Target weight
+    updatedAt: v.string(),
+  }),
 });

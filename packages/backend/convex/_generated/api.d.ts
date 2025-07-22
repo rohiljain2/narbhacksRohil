@@ -18,6 +18,7 @@ import type * as notes from "../notes.js";
 import type * as nutrition from "../nutrition.js";
 import type * as openai from "../openai.js";
 import type * as progress from "../progress.js";
+import type * as userGoals from "../userGoals.js";
 import type * as utils from "../utils.js";
 
 /**
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   nutrition: typeof nutrition;
   openai: typeof openai;
   progress: typeof progress;
+  userGoals: typeof userGoals;
   utils: typeof utils;
 }>;
 export declare const api: FilterApi<
