@@ -124,12 +124,16 @@ After deployment, verify the following:
    - This was fixed by removing unnecessary function runtime configuration
    - The error occurred because we initially included API function settings when no API routes exist
 
-5. **Authentication issues:**
+5. **"Cannot install with frozen-lockfile" error:**
+   - This was fixed by updating pnpm-lock.yaml and removing the --frozen-lockfile flag
+   - The error occurred because the lockfile was out of sync with package.json dependencies
+
+6. **Authentication issues:**
    - Verify Clerk keys are correct and match your environment
    - Check that your Clerk application is properly configured
    - Ensure middleware.ts is correctly set up
 
-6. **Database connection issues:**
+7. **Database connection issues:**
    - Verify Convex URL is correct
    - Check that your Convex deployment is running
    - Ensure you're using the production Convex URL for production deployment
