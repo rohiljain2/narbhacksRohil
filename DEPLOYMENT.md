@@ -83,7 +83,7 @@ The following configuration files have been created for optimal deployment:
 ### `apps/web/vercel.json`
 - Configures Vercel to handle the monorepo structure
 - Uses pnpm and Turbo for building
-- Sets up proper Node.js runtime for API functions
+- Optimized for Next.js framework deployment
 
 ### `apps/web/next.config.js`
 - Handles workspace dependencies
@@ -120,12 +120,16 @@ After deployment, verify the following:
    - Ensure all dependencies are properly installed
    - Verify that the build command is correct
 
-4. **Authentication issues:**
+4. **"Function Runtimes must have a valid version" error:**
+   - This was fixed by removing unnecessary function runtime configuration
+   - The error occurred because we initially included API function settings when no API routes exist
+
+5. **Authentication issues:**
    - Verify Clerk keys are correct and match your environment
    - Check that your Clerk application is properly configured
    - Ensure middleware.ts is correctly set up
 
-5. **Database connection issues:**
+6. **Database connection issues:**
    - Verify Convex URL is correct
    - Check that your Convex deployment is running
    - Ensure you're using the production Convex URL for production deployment
