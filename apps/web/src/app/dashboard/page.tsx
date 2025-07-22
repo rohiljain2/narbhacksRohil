@@ -54,7 +54,7 @@ export default function DashboardPage() {
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-semibold text-gray-900">Today's Workouts</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Today&apos;s Workouts</h3>
             <p className="text-3xl font-bold text-blue-600">2</p>
             <p className="text-sm text-gray-600">Completed</p>
           </div>

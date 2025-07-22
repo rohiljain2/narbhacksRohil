@@ -151,7 +151,7 @@ export default function NutritionPage() {
         {/* Today's Meals */}
         <div className="bg-white rounded-lg shadow mb-8">
           <div className="p-6 border-b">
-            <h2 className="text-xl font-semibold text-gray-900">Today's Meals</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Today&apos;s Meals</h2>
           </div>
           <div className="p-6">
             {todayMeals.length === 0 ? (
